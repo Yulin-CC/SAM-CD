@@ -1,0 +1,34 @@
+# SAM-CD ONNX 独立包配置（路径相对本目录 SAMCD-onnx/，或以 / 开头的绝对路径）
+
+############## 导出阶段（可选，权重已含于 weights/ 时可跳过） ###############
+export:
+  sam_weights: "weights/FastSAM-x.pt"
+  fastsam_onnx_output: "weights/FastSAM-x.onnx"
+  cd_head_weights: "weights/best_CDHead.pth"
+  cd_head_onnx_output: "weights/best_CDHead.onnx"
+  imgsz: 512
+  crop_size: 512
+  opset: 18
+  fastsam_dynamic: true
+  cd_head_dynamic: false
+  simplify: false
+  device: null
+
+############## 推理阶段 ###############
+predict:
+  dev_id: 0
+  fastsam_onnx: "weights/FastSAM-x.onnx"
+  cd_head_onnx: "weights/best_CDHead.onnx"
+  crop_size: [512, 512]
+  fastsam_imgsz: 512
+  tta: true
+  time: true
+  threshold: 0.5
+  inference_sliding_crop: true
+  test_dir: "/path/to/dataset"          # 须含 A/ B/
+  pred_dir: "output"                    # 相对 SAMCD-onnx/ 或绝对路径
+  register:                             # 固定 crop_pasteback 模式
+    enable: true
+    workers: 4
+    scales: [0.125, 0.25, 0.5, 1.0]
+    max_iter: 500

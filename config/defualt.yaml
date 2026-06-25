@@ -1,0 +1,76 @@
+# SAM-CD 默认配置
+# 脚本中若传入同名参数（如 0-QuickStart/*.sh），脚本参数优先于此文件
+
+# ========== 数据集参数 ==========
+dataset:
+  root: "/home/yulin/0-data/0-public/changedetect/LEVIR-CD+/LEVIR-CD+"  # [数据集] 数据集根目录（包含 train/val/test）
+
+# ========== 训练参数 ==========
+train:
+  project: "SAM-CD-default"         # [项目] 训练任务名（用于 runs 目录命名）
+  run_base_dir: "runs/0-train"      # [项目] 训练输出根目录
+  dev_id: 0                         # [设备] 单卡训练时的 GPU ID
+  multi_gpu: "0,1"                  # [设备] 多卡 ID 列表字符串，如 "0,1"；null 表示关闭
+  gpu: true                         # [设备] 是否使用 GPU
+  epochs: 140                       # [训练参数] 训练轮数
+  train_batch_size: 16              # [训练参数] 训练 batch size 
+  val_batch_size: 2                 # [训练参数] 验证 batch size
+  lr: 0.08                          # [训练参数] 初始学习率
+  weight_decay: 0.001               # [训练参数] 权重衰减 
+  momentum: 0.9                     # [训练参数] SGD 动量
+  crop_size: 512                    # [训练参数] 训练/验证裁剪尺寸 
+  print_freq: 30                    # [训练参数] 日志打印间隔（iter）
+  num_workers: 4                    # [训练参数] DataLoader 子进程数
+  train_loss_type: "focal"          # [训练参数] 损失函数类型: bce | weighted_bce | dice | focal ⭐
+  train_random_crop: false          # [数据增强] 训练是否随机裁剪 ⭐
+  train_crop_nums: 5                # [数据增强]   每张训练图随机裁剪的样本倍数 
+  train_pos_aware_crop: true        # [数据增强]   正样本偏好裁剪（缓解正负样本不均衡）
+  train_pos_aware_crop_ratio: 0.5   # [数据增强]   正样本偏好裁剪概率（0.0~1.0），值越大正样本块出现越频繁 
+  train_random_flip: 0.75           # [数据增强] 随机翻转概率（0.0~1.0，0.75≈当前默认行为）⭐
+  train_random_scale: 0.2           # [数据增强] 随机平移+缩放+旋转概率（0.0~1.0）⭐
+  val_random_flip: false            # [数据增强] 验证是否随机翻转（通常关闭）
+  pred_dir: null                    # [保存] 可选：可视化图输出目录；null 默认使用 run_dir/vis
+  chkpt_dir: null                   # [保存] 可选：checkpoint 输出目录；null 默认使用 run_dir/checkpoint
+  log_dir: null                     # [保存] 可选：TensorBoard 日志目录；null 默认使用 run_dir/checkpoint（与 pth 同目录）
+  load_path: null                   # [模型] 可选：微调或断点；可指向 best.pth（头）或 checkpoint_last.pth（全量）
+  predict_step: 5                   # [验证] 每 N 个 epoch 保存一次验证可视化
+  patch_average: false              # [验证] 指标可视化：true=patch平均(每块先算再平均)；false=micro(全验证像素合并再算，论文常用)
+
+# ========== 推理参数 ==========
+predict:
+  dev_id: 0                            # [设备] 推理 GPU ID
+  crop_size: [512, 512]                # [推理参数] 推理裁剪尺寸 [H, W]
+  tta: true                            # [推理参数] 是否启用测试时增强
+  time: true                           # [推理参数] 是否打印分阶段计时（参考 SCM）
+  threshold: 0.5                       # [推理参数] 二分类阈值：sigmoid 输出 ≥ 该值判定为变化区域（0.0~1.0），调低可提高召回、调高可提高精确 ⭐
+  inference_sliding_crop: false        # [推理参数] true=大图滑窗裁剪；false=大图 resize 到 crop_size 推理后再还原 ⭐
+  vismask: true                        # [推理参数] 是否生成可视化叠加图（红色半透明叠到原图）
+  test_dir: "/home/yulin/0-data/0-public/changedetect/Test-Dir"           # [推理参数] 测试集目录（包含 A/B）
+  pred_dir: "/home/yulin/0-data/0-public/changedetect/Test-Dir/repro"     # [推理参数] 推理结果输出目录
+  chkpt_path: "runs/0-train/SAM-CD-default/best.pth"                      # [模型] 与训练写出 best.pth 对齐（官方同款仅 CD 头）
+  register:                                                               # [推理参数] 内置配准；ECC 默认见 utils/register.py；固定 crop_pasteback 模式
+    enable: true                                                         # [推理参数] true=推理前自动配准
+    workers: 4                                                            # [推理参数] 配准并行进程数
+    scales: [0.125, 0.25, 0.5, 1.0]                                       # [推理参数] ECC 金字塔（末级须 1.0）；快速可改 [0.25, 0.5, 1.0]
+    max_iter: 500                                                         # [推理参数] ECC 最大迭代次数；快速可改 500
+
+# ========== 评估参数 ==========
+eval:
+  gt_dir: "/home/yulin/0-data/0-public/changedetect/Test-Dir/label"       # [验证参数] GT 标签目录
+  pred_dir: "/home/yulin/0-data/0-public/changedetect/Test-Dir/repro"     # [验证参数] 待评估预测目录
+  threshold: 0.5                                                          # [验证参数] 评估二分类阈值：与推理 threshold 保持一致，用于 calc_TP 中的 pred/label 二值化
+
+# ========== ONNX 导出参数 ==========
+# 0-QuickStart/4-export.sh 中的参数优先级高于此文件
+export:
+  sam_weights: "weights/FastSAM-x.pt"                                     # [模型] FastSAM PyTorch 权重
+  fastsam_onnx_output: "weights/FastSAM-x.onnx"                           # [导出] FastSAM ONNX 输出
+  cd_head_weights: null                                                   # [模型] 留空则沿用 predict.chkpt_path
+  cd_head_onnx_output: "weights/SAM-CD_CDHead.onnx"                       # [导出] CD Head ONNX 输出
+  imgsz: 512                                                              # [导出] FastSAM dummy 边长（= crop_size）
+  crop_size: 512                                                          # [导出] CD Head 输出分辨率
+  fastsam_dynamic: true                                                   # [导出] FastSAM 输入 H/W 动态
+  cd_head_dynamic: false                                                  # [导出] CD Head 固定 512（推荐）
+  opset: 18                                                               # [导出] ONNX opset 版本
+  simplify: false                                                         # [导出] 是否简化 ONNX 模型
+  device: null                                                            # [设备] 导出设备；null 自动选择
