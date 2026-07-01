@@ -113,7 +113,7 @@ def load_config(path):
 
 def parse_cli():
     parser = argparse.ArgumentParser()
-    parser.add_argument('--config', default=os.path.join(PROJECT_ROOT, 'config', 'defualt.yaml'), help='yaml config path')
+    parser.add_argument('--config', default=os.path.join(PROJECT_ROOT, 'config', 'default.yaml'), help='yaml config path')
     parser.add_argument('--project', default=None, help='override project name')
     parser.add_argument('--data_root', default=None, help='override dataset root')
     parser.add_argument('--epochs', type=int, default=None, help='override epochs')

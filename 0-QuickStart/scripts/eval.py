@@ -79,7 +79,7 @@ def calc_TP(pred, label):
 
 def parse_args():
     parser = argparse.ArgumentParser()
-    parser.add_argument('--config', default=os.path.join(PROJECT_ROOT, 'config', 'defualt.yaml'), help='yaml config path')
+    parser.add_argument('--config', default=os.path.join(PROJECT_ROOT, 'config', 'default.yaml'), help='yaml config path')
     parser.add_argument('--GT_dir', default=None, help='ground truth label dir')
     parser.add_argument('--pred_dir', default=None, help='prediction dir')
     return parser.parse_args()

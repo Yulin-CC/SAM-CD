@@ -54,6 +54,29 @@ def merge_args_with_yaml(args: Namespace, yaml_path: str) -> Namespace:
     return args
 
 
+def _assert_tensorrt_friendly_resize(onnx_path: Path) -> None:
+    import onnx
+
+    model = onnx.load(str(onnx_path))
+    bad = []
+    for node in model.graph.node:
+        if node.op_type != "Resize":
+            continue
+        sizes_input = node.input[3] if len(node.input) > 3 else ""
+        if not sizes_input:
+            continue
+        for producer in model.graph.node:
+            if sizes_input in producer.output and producer.op_type == "Concat":
+                bad.append(node.name or "Resize")
+                break
+    if bad:
+        raise RuntimeError(
+            "导出 ONNX 仍含 TensorRT 不兼容的 Resize(sizes=Concat): "
+            + ", ".join(bad)
+        )
+    print("  TensorRT check: Resize uses scales (OK)")
+
+
 def _feature_dummy_sizes(imgsz: int):
     """与 FastSAM export imgsz 对应的四层特征空间尺寸（经验对齐 1024 输入）。"""
     # y15(s8), y18(s16), y21(s32), y1(s4)
@@ -86,7 +109,9 @@ def export_to_onnx(args: Namespace) -> None:
     if incompatible.unexpected_keys:
         raise RuntimeError(f"CD Head 存在 unexpected keys: {incompatible.unexpected_keys[:8]}")
 
-    wrapper = CDHeadExport(net, out_h=crop_size, out_w=crop_size).eval().to(device)
+    wrapper = CDHeadExport(
+        net, out_h=crop_size, out_w=crop_size, feat_imgsz=imgsz
+    ).eval().to(device)
 
     feat_shapes = _feature_dummy_sizes(imgsz)
     dummy = [torch.randn(shape, device=device) for shape in feat_shapes]
@@ -134,6 +159,7 @@ def export_to_onnx(args: Namespace) -> None:
             print("  ⚠️ onnxsim 未安装，跳过 simplify")
 
     merge_external_data_to_single_file(output_path)
+    _assert_tensorrt_friendly_resize(output_path)
 
     print(f"CD Head ONNX exported to: {output_path}")
     print(f"  Inputs:  {input_names}")

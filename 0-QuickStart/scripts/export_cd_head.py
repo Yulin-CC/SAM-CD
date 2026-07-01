@@ -60,6 +60,30 @@ def merge_args_with_yaml(args: Namespace, yaml_path: str) -> Namespace:
     return args
 
 
+def _assert_tensorrt_friendly_resize(onnx_path: Path) -> None:
+    """TensorRT 不接受 sizes=Concat(Shape, [H,W]) 的 6 元素 Resize。"""
+    import onnx
+
+    model = onnx.load(str(onnx_path))
+    bad = []
+    for node in model.graph.node:
+        if node.op_type != "Resize":
+            continue
+        sizes_input = node.input[3] if len(node.input) > 3 else ""
+        if not sizes_input:
+            continue
+        for producer in model.graph.node:
+            if sizes_input in producer.output and producer.op_type == "Concat":
+                bad.append(node.name or "Resize")
+                break
+    if bad:
+        raise RuntimeError(
+            "导出 ONNX 仍含 TensorRT 不兼容的 Resize(sizes=Concat): "
+            + ", ".join(bad)
+        )
+    print("  TensorRT check: Resize uses scales (OK)")
+
+
 def _feature_dummy_sizes(imgsz: int):
     return [
         (1, 320, imgsz // 8, imgsz // 8),
@@ -90,7 +114,9 @@ def export_to_onnx(args: Namespace) -> None:
     if incompatible.unexpected_keys:
         raise RuntimeError(f"CD Head 存在 unexpected keys: {incompatible.unexpected_keys[:8]}")
 
-    wrapper = CDHeadExport(net, out_h=crop_size, out_w=crop_size).eval().to(device)
+    wrapper = CDHeadExport(
+        net, out_h=crop_size, out_w=crop_size, feat_imgsz=imgsz
+    ).eval().to(device)
 
     feat_shapes = _feature_dummy_sizes(imgsz)
     dummy = [torch.randn(shape, device=device) for shape in feat_shapes]
@@ -105,10 +131,11 @@ def export_to_onnx(args: Namespace) -> None:
         "featB_l0", "featB_l1", "featB_l2", "featB_l3",
     ]
     dynamic = bool(getattr(args, "dynamic", False))
-    dynamic_axes = {name: {0: "batch", 2: "height", 3: "width"} for name in input_names}
-    dynamic_axes["change_logit"] = {0: "batch", 2: "height", 3: "width"}
+    # Only batch is dynamic; H/W are fixed (TensorRT compatible)
+    dynamic_axes = {name: {0: "batch"} for name in input_names}
+    dynamic_axes["change_logit"] = {0: "batch"}
 
-    opset = int(getattr(args, "opset", 16))
+    opset = int(getattr(args, "opset", 17))
     simplify = bool(getattr(args, "simplify", False))
 
     torch.onnx.export(
@@ -138,6 +165,7 @@ def export_to_onnx(args: Namespace) -> None:
             print("  ⚠️ onnxsim 未安装，跳过 simplify")
 
     merge_external_data_to_single_file(output_path)
+    _assert_tensorrt_friendly_resize(output_path)
 
     print(f"CD Head ONNX exported to: {output_path}")
     print(f"  Inputs:  {input_names}")
@@ -149,7 +177,7 @@ def build_parser() -> argparse.ArgumentParser:
     p = argparse.ArgumentParser(description="Export SAM-CD CD Head to ONNX.")
     p.add_argument("--cd_head_weights", default=None, help="best.pth (heads_only)")
     p.add_argument("-o", "--output", default=None, help="Output ONNX path")
-    p.add_argument("--config", default=str(REPO_ROOT / "config" / "defualt.yaml"))
+    p.add_argument("--config", default=str(REPO_ROOT / "config" / "default.yaml"))
     p.add_argument("--imgsz", type=int, default=None, help="FastSAM 输入边长（特征 dummy 用）")
     p.add_argument("--fastsam_imgsz", type=int, default=None)
     p.add_argument("--crop_size", type=int, default=None, help="CD Head 输出 H=W")

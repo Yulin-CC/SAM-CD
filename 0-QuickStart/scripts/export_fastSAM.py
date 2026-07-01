@@ -164,7 +164,7 @@ def build_parser() -> argparse.ArgumentParser:
     p = argparse.ArgumentParser(description="Export FastSAM to ONNX (4 feature maps only).")
     p.add_argument("--sam_weights", default=None, help="FastSAM .pt weights")
     p.add_argument("-o", "--output", default=None, help="Output ONNX path")
-    p.add_argument("--config", default=str(REPO_ROOT / "config" / "defualt.yaml"))
+    p.add_argument("--config", default=str(REPO_ROOT / "config" / "default.yaml"))
     p.add_argument("--imgsz", type=parse_imgsz, default=None)
     p.add_argument("--opset", type=int, default=None)
     p.add_argument("--device", default=None)

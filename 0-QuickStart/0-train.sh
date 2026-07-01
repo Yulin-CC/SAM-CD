@@ -11,16 +11,16 @@ PROJECT_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
 #--------------------------------------#
 # 需要修改的值
 #--------------------------------------#
-dev_id="1"                            # 使用的 GPU ID
+dev_id="0"                            # 使用的 GPU ID
 #--------------------------------------#
-project="1-ChangeDetect_SAMCD-2606-v1.2-resize"      # 训练任务名
+project="[ChangeDetect]-SAMCD-2606-v1.2"      # 训练任务名
 #--------------------------------------#
 dataset="data/0-ChangeD.yaml"          # 数据集路径（yaml 或根目录）
 #--------------------------------------#
 load_path=""                           # 可选：微调初始化权重路径；留空则从头训练
 resume=0                               # 1=从上次 checkpoint_last.pth 断点续训（恢复优化器+epoch）
 background=1                           # 1=后台运行（nohup）；0=前台盯着看
-config_path="config/defualt_resize.yaml"      # 统一配置文件路径（相对项目根目录）
+config_path="config/default.yaml"      # 统一配置文件路径（相对项目根目录）
 #--------------------------------------#
 
 

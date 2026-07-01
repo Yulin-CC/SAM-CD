@@ -6,19 +6,40 @@ from pathlib import Path
 
 import torch
 import torch.nn as nn
-import torch.nn.functional as F
+
+
+def _decoder_output_hw(feat_imgsz: int) -> int:
+    """FastSAM 四层特征经 Decoder 后的空间边长（= fastsam_imgsz // 4）。"""
+    return int(feat_imgsz) // 4
 
 
 class CDHeadExport(nn.Module):
     """
     仅导出 SAM_CD 中 Adapter + Decoder + SA + resCD + headC + segmenterC。
     输入为双时相各 4 层 FastSAM 特征（与 ms_feats 同序）。
+
+    末层上采样使用 nn.Upsample(scale_factor=...) 而非 F.interpolate(size=...)，
+    避免 ONNX Resize 的 sizes 输入为 6 元素 Concat，导致 TensorRT 解析失败。
     """
 
-    def __init__(self, sam_cd: nn.Module, out_h: int, out_w: int):
+    def __init__(self, sam_cd: nn.Module, out_h: int, out_w: int, feat_imgsz: int = 512):
         super().__init__()
         self.out_h = int(out_h)
         self.out_w = int(out_w)
+        dec_hw = _decoder_output_hw(feat_imgsz)
+        if self.out_h != self.out_w:
+            raise ValueError(
+                f"CDHeadExport 需要 out_h == out_w，当前 ({self.out_h}, {self.out_w})"
+            )
+        if self.out_h % dec_hw != 0:
+            raise ValueError(
+                f"crop_size={self.out_h} 须为 decoder 输出边长 {dec_hw} 的整数倍 "
+                f"(fastsam_imgsz={feat_imgsz})"
+            )
+        scale = self.out_h // dec_hw
+        self.upsample = nn.Upsample(
+            scale_factor=scale, mode="bilinear", align_corners=False
+        )
 
         self.Adapter32 = sam_cd.Adapter32
         self.Adapter16 = sam_cd.Adapter16
@@ -63,9 +84,7 @@ class CDHeadExport(nn.Module):
         featC = self.resCD(featC)
         featC = self.headC(featC) * attn
         outC = self.segmenterC(featC)
-        return F.interpolate(
-            outC, size=(self.out_h, self.out_w), mode="bilinear", align_corners=True
-        )
+        return self.upsample(outC)
 
 
 def merge_external_data_to_single_file(onnx_path: str | Path) -> Path:

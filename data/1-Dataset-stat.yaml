@@ -1,10 +1,12 @@
 #【Statics of the ChangeD dataset】
-# Dataset Used: 4
-# Dataset Sum：5608
-# Date：2026-06-24 18:44:07.289830
+# Dataset Used: 6
+# Dataset Sum：8396
+# Date：2026-06-29 17:04:51.120764
 
 
+'1-ChangeDetct/GEOAI-((ChangeD_LEVIRCD+))-Public-2605-(D)(OL)                              ': 936
+'1-ChangeDetct/GEOAI-((ChangeD_UAVCD))-Public-2606-(D)(OL)                                 ': 1418
+'1-ChangeDetct/GEOAI-((ChangeD_WHUCD))-Public-2606-(D)(OL)                                 ': 471
 '1-ChangeDetct/GEOAI-((ChangeD_Zhongke))-Selfcollect-2605-(D)(OL)                          ': 1531
-'1-ChangeDetct/GEOAI-((ChangeD_Zhongke_dsample))-Selfcollect-2606-(D)(OL)                  ': 1472
-'1-ChangeDetct/GEOAI-((ChangeD_Zhongke_dsample02))-Selfcollect-2606-(D)(OL)                ': 1028
+'1-ChangeDetct/GEOAI-((ChangeD_Zhongke))-Selfcollect-2606-(D)(OL)                          ': 2463
 '1-ChangeDetct/GEOAI-((ChangeD_noalpha))-Selfcollect-2605-(D)(OL)                          ': 1577

@@ -26,3 +26,12 @@
  # Dataset Used: 4
  # Dataset update：['1-ChangeDetct/GEOAI-((ChangeD_Zhongke_dsample02))-Selfcollect-2606-(D)(OL)']
  # Update news：[无人机] 变化检测：增加负样本，城区的车辆和相关建筑废料等。
+
+
+## 1-ChangeDetect-2605-v1.2 ##
+
+ # Date：2026-06-29 17:04:51.120649
+ # Responsible Person：yulin
+ # Dataset Used: 6
+ # Dataset update：['1-ChangeDetct/GEOAI-((ChangeD_LEVIRCD+))-Public-2605-(D)(OL)', '1-ChangeDetct/GEOAI-((ChangeD_UAVCD))-Public-2606-(D)(OL)', '1-ChangeDetct/GEOAI-((ChangeD_WHUCD))-Public-2606-(D)(OL)', '1-ChangeDetct/GEOAI-((ChangeD_Zhongke))-Selfcollect-2606-(D)(OL)']
+ # Update news：[无人机] 变化检测：清洗负样本，新增公共数据集。

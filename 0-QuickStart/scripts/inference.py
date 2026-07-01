@@ -45,7 +45,7 @@ class PredOptions:
         self.initialized = False
 
     def initialize(self, parser):
-        parser.add_argument('--config', default=os.path.join(PROJECT_ROOT, 'config', 'defualt.yaml'))
+        parser.add_argument('--config', default=os.path.join(PROJECT_ROOT, 'config', 'default.yaml'))
         parser.add_argument('--crop_size', nargs=2, type=int, default=None)
         parser.add_argument('--TTA', default=None)
         parser.add_argument('--threshold', type=float, default=None)
@@ -405,7 +405,7 @@ def predict_plain(net, opt, valid_list, img_a_dir, img_b_dir, bcd_map_dir, enabl
     return stats
 
 
-def predict_with_register(net, opt, valid_list, img_a_dir, img_b_dir, bcd_map_dir, vis_dir, reg_cfg, enable_time):
+def predict_with_register(net, opt, valid_list, img_a_dir, img_b_dir, bcd_map_dir, vis_dir, register_b_dir, reg_cfg, enable_time):
     scales = [float(x) for x in reg_cfg.get('scales', reg.DEFAULT_SCALES)]
     max_iter = int(reg_cfg.get('max_iter', reg.DEFAULT_MAX_ITER))
     crop_margin = reg.DEFAULT_CROP_MARGIN
@@ -443,6 +443,7 @@ def predict_with_register(net, opt, valid_list, img_a_dir, img_b_dir, bcd_map_di
         reg.imwrite_unicode(os.path.join(bcd_map_dir, fname), pred_full)
         vis = overlay_vis(pack['a_full'], pred_full)
         reg.imwrite_unicode(os.path.join(vis_dir, fname), vis)
+        reg.imwrite_unicode(os.path.join(register_b_dir, fname), pack['b_full'])
         post_t = time.perf_counter() - t_stage
 
         if enable_time:
@@ -504,15 +505,18 @@ def main():
 
     bcd_map_dir = os.path.join(opt.pred_dir, 'bcd_map')
     vis_dir = os.path.join(opt.pred_dir, 'vismask')
+    register_b_dir = os.path.join(opt.pred_dir, 'register_B')
     os.makedirs(bcd_map_dir, exist_ok=True)
     if register_enable:
         os.makedirs(vis_dir, exist_ok=True)
+        os.makedirs(register_b_dir, exist_ok=True)
 
     print(f'Prediction masks -> {bcd_map_dir}')
     if register_enable:
         print(f'Register: enable=True, mode={REGISTER_MODE}, workers={reg_cfg.get("workers", 4)}, '
               f'scales={reg_cfg.get("scales", reg.DEFAULT_SCALES)}, max_iter={reg_cfg.get("max_iter", reg.DEFAULT_MAX_ITER)}')
         print(f'Vismask -> {vis_dir}')
+        print(f'Register B -> {register_b_dir}')
     mode = 'sliding crop' if opt.inference_sliding_crop else 'resize'
     print(f'Inference mode: {mode}, crop_size={opt.crop_size}, threshold={opt.threshold}, TTA={opt.TTA}')
 
@@ -529,7 +533,7 @@ def main():
 
     if register_enable:
         stats = predict_with_register(
-            net, opt, valid_list, img_a_dir, img_b_dir, bcd_map_dir, vis_dir, reg_cfg, enable_time
+            net, opt, valid_list, img_a_dir, img_b_dir, bcd_map_dir, vis_dir, register_b_dir, reg_cfg, enable_time
         )
     else:
         stats = predict_plain(net, opt, valid_list, img_a_dir, img_b_dir, bcd_map_dir, enable_time)
@@ -542,6 +546,7 @@ def main():
     print(f'   - 二值变化图: bcd_map/')
     if register_enable:
         print(f'   - 可视化叠加: vismask/')
+        print(f'   - 配准后 B 图: register_B/')
     print(f'Total time: {time.time() - begin_time:.2f}s')
 
 

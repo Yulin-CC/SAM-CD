@@ -15,7 +15,7 @@ WORK_DIR=$(pwd)
 #--------------------------------------------------------#
 devices=0                                                              # GPU 设备 ID
 #--------------------------------------------------------#
-project="1-ChangeDetect_SAMCD-2606-v1.2-resize"                               # 训练任务名（CD Head 权重路径）
+project="1-ChangeDetect_SAMCD-2606-v1.2"                               # 训练任务名（CD Head 权重路径）
 #--------------------------------------------------------#
 sam_weights="./weights/FastSAM-x.pt"                                   # FastSAM PyTorch 权重
 fastsam_onnx_output="./weights/FastSAM-x.onnx"                         # FastSAM ONNX 输出
@@ -23,7 +23,7 @@ fastsam_onnx_output="./weights/FastSAM-x.onnx"                         # FastSAM
 cd_head_weights="./runs/0-train/$project/checkpoint/best.pth"          # CD Head PyTorch 权重
 cd_head_onnx_output="./runs/0-train/$project/checkpoint/best.onnx"                     # CD Head ONNX 输出
 #--------------------------------------------------------#
-config_file="./config/defualt.yaml"                                    # 配置文件（相对项目根目录）
+config_file="./config/default.yaml"                                    # 配置文件（相对项目根目录）
 #--------------------------------------------------------#
 
 
