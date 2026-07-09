@@ -1,6 +1,6 @@
 #【Train dataset for ChangeD】
-# Dataset Used: 6
-# Dataset Sum：8396
+# Dataset Used: 3
+# Dataset Sum：2825
 # Date：2026-06-29 17:04:51.118968
 
 
@@ -11,13 +11,7 @@ train:
 - /home/yulin/0-data/1-ChangeDetct/GEOAI-((ChangeD_LEVIRCD+))-Public-2605-(D)(OL)/train.txt
 - /home/yulin/0-data/1-ChangeDetct/GEOAI-((ChangeD_UAVCD))-Public-2606-(D)(OL)/train.txt
 - /home/yulin/0-data/1-ChangeDetct/GEOAI-((ChangeD_WHUCD))-Public-2606-(D)(OL)/train.txt
-- /home/yulin/0-data/1-ChangeDetct/GEOAI-((ChangeD_Zhongke))-Selfcollect-2605-(D)(OL)/train.txt
-- /home/yulin/0-data/1-ChangeDetct/GEOAI-((ChangeD_Zhongke))-Selfcollect-2606-(D)(OL)/train.txt
-- /home/yulin/0-data/1-ChangeDetct/GEOAI-((ChangeD_noalpha))-Selfcollect-2605-(D)(OL)/train.txt
 val:
 - /home/yulin/0-data/1-ChangeDetct/GEOAI-((ChangeD_LEVIRCD+))-Public-2605-(D)(OL)/val.txt
 - /home/yulin/0-data/1-ChangeDetct/GEOAI-((ChangeD_UAVCD))-Public-2606-(D)(OL)/val.txt
 - /home/yulin/0-data/1-ChangeDetct/GEOAI-((ChangeD_WHUCD))-Public-2606-(D)(OL)/val.txt
-- /home/yulin/0-data/1-ChangeDetct/GEOAI-((ChangeD_Zhongke))-Selfcollect-2605-(D)(OL)/val.txt
-- /home/yulin/0-data/1-ChangeDetct/GEOAI-((ChangeD_Zhongke))-Selfcollect-2606-(D)(OL)/val.txt
-- /home/yulin/0-data/1-ChangeDetct/GEOAI-((ChangeD_noalpha))-Selfcollect-2605-(D)(OL)/val.txt
