@@ -7,7 +7,7 @@
 ## 一键安装（推荐）
 
 ```bash
-conda activate changeD
+conda activate samcd
 pip install -r z-others/requirements.txt   # ultralytics == 8.4.56
 bash install_tbr.sh                        # 将 utils/tbr/ 覆盖到当前环境的 ultralytics
 ```

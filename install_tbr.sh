@@ -6,7 +6,7 @@
 set -euo pipefail
 
 if [ -z "${CONDA_PREFIX:-}" ]; then
-    echo "❌ 请先执行: conda activate changeD"
+    echo "❌ 请先执行: conda activate samcd"
     exit 1
 fi
 

@@ -9,19 +9,13 @@
 #---------------#
 # 需要修改的值
 #-----------------#
-Path='/home/yulin/0-data/1-ChangeDetct/GEOAI-((ChangeD_Zhongke_dsample02))-Selfcollect-2606-(D)(OL)'              # 清洗好的数据路径
+Path='path/to/dataset/dir'              # 清洗好的数据路径
 part_ratio=1.0                                                                                                              # 使用样本比例（1.0=全部）
 
 #-------------------------------------------------------------------------------------#
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 UTIL_DIR="${SCRIPT_DIR}/utils"
-
-#-------------------#
-# 切换到虚拟环境
-#-------------------#
-source /home/ubuntu/miniconda3/etc/profile.d/conda.sh
-conda activate changeD
 
 #-------------------#
 # 整理数据集（可选）

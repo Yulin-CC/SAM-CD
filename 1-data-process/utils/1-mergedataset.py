@@ -13,7 +13,7 @@ import os
 #==============================#
 # 接口配置
 #==============================#
-DATA_DIR = r"/home/yulin/0-data/1-ChangeDetct/GEOAI-((ChangeD_Heilongzhen))-Selfcollect-2605-(D)(OL)"
+DATA_DIR = r"path/to/dataset/dir"
 EXCLUDE_LABELS = "f"  # 逗号分隔，如 "f,error"；空字符串表示不处理 JSON
 #==============================#
 

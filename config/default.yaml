@@ -3,7 +3,7 @@
 
 # ========== 数据集参数 ==========
 dataset:
-  root: "/home/yulin/0-data/0-public/changedetect/LEVIR-CD+/LEVIR-CD+"  # [数据集] 数据集根目录（包含 train/val/test）
+  root: "path/to/dataset/root"  # [数据集] 数据集根目录（包含 train/val/test）
 
 # ========== 训练参数 ==========
 train:
@@ -48,8 +48,8 @@ predict:
   crop_mask: true                      # [推理参数] 裁剪：是否裁剪变化区域并输出 A|B 对比图
   crop_mask_expand: 0.8                # [推理参数] 裁剪：外扩比例（0.0 ~ 1.0）
   crop_mask_vismask: false             # [推理参数] 裁剪：true=左 vismask|右 B；false=左 A|右 B（B 优先 pred_dir/register_B/）
-  test_dir: "/home/yulin/0-data/0-public/changedetect/Test-Dir"           # [推理参数] 测试集目录（包含 A/B）
-  pred_dir: "/home/yulin/0-data/0-public/changedetect/Test-Dir/repro"     # [推理参数] 推理结果输出目录
+  test_dir: "path/to/test/dir"           # [推理参数] 测试集目录（包含 A/B）
+  pred_dir: "path/to/test/dir/repro"     # [推理参数] 推理结果输出目录
   chkpt_path: "runs/0-train/SAM-CD-default/best.pth"                      # [模型] 与训练写出 best.pth 对齐（官方同款仅 CD 头）
   register:                                                               # [推理参数] 内置配准；ECC 默认见 utils/register.py；固定 crop_pasteback 模式
     enable: true                                                          # [推理参数] true=推理前自动配准
@@ -59,8 +59,8 @@ predict:
 
 # ========== 评估参数 ==========
 eval:
-  gt_dir: "/home/yulin/0-data/0-public/changedetect/Test-Dir/label"       # [验证参数] GT 标签目录
-  pred_dir: "/home/yulin/0-data/0-public/changedetect/Test-Dir/repro"     # [验证参数] 待评估预测目录
+  gt_dir: "path/to/GT/dir"       # [验证参数] GT 标签目录
+  pred_dir: "path/to/pred/dir"     # [验证参数] 待评估预测目录
   threshold: 0.5                                                          # [验证参数] 评估二分类阈值：与推理 threshold 保持一致，用于 calc_TP 中的 pred/label 二值化
 
 # ========== ONNX 导出参数 ==========

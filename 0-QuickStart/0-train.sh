@@ -25,13 +25,6 @@ config_path="config/default.yaml"      # 统一配置文件路径（相对项目
 
 
 #---------------#
-# 切换到虚拟环境
-#---------------#
-source /home/ubuntu/miniconda3/etc/profile.d/conda.sh  # 虚拟环境切换实例化
-conda activate changeD
-
-
-#---------------#
 # 运行训练程序
 #---------------#
 cd "$PROJECT_ROOT"

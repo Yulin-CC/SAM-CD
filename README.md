@@ -31,7 +31,7 @@ SAM-CD
 │   ├── utils
 │   └── 4-create_trainset.sh    # 数据集处理脚本，包括整理，标签转换和train/val划分等
 ├── config
-│   └── defualt.yaml            # 统一配置文件（所有参数默认值）
+│   └── default.yaml            # 统一配置文件（所有参数默认值）
 ├── models
 │   ├── SAM_CD.py               # 主模型（FastSAM encoder + CD head）
 │   └── FastSAM                 # FastSAM 本地封装（含兼容性修改）
@@ -73,18 +73,18 @@ YOUR_DATA_DIR
 │   └── val.txt     
 ```
 
-在 `config/defual.yaml` 中填写数据集根目录：
+在 `config/default.yaml` 中填写数据集根目录：
 
 ```yaml
 dataset:
-  root: "/your/data/root"
+  root: "path/to/dataset/root"
 ```
 
 ---
 
 ## 2 配置说明
 
-所有参数集中在 `config/defual.yaml`，分四个命名空间：
+所有参数集中在 `config/default.yaml`，分四个命名空间：
 
 | 命名空间 | 说明 |
 |---|---|
@@ -95,7 +95,7 @@ dataset:
 | `export` | ONNX 导出路径、`crop_size`、动态轴等 |
 
 `0-QuickStart/` 脚本顶部变量会**覆盖** yaml 中对应字段，优先级：  
-**脚本变量 > config/defual.yaml > 代码默认值**
+**脚本变量 > config/default.yaml > 代码默认值**
 
 ---
 
@@ -151,7 +151,7 @@ bash 0-QuickStart/4-export.sh
 - `CDHeadExport`：可 trace 的 CD Head 包装
 - `merge_external_data_to_single_file`：合并 `.onnx` + `.onnx.data` 为单文件
 
-相关默认参数见 `config/defualt.yaml` 的 `export` 段。
+相关默认参数见 `config/default.yaml` 的 `export` 段。
 
 ---
 

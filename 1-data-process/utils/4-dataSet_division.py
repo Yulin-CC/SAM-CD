@@ -19,7 +19,7 @@ from tqdm import tqdm
 #==============================#
 # 接口配置
 #==============================#
-DATA_DIR = "/home/yulin/0-data/1-ChangeDetct/toclean/GEOAI-((ChangeD_UAVCDCD))-Public-2606-(D)(OL)"
+DATA_DIR = "path/to/dataset/dir"
 MODE = "txt"           # txt 或 dir
 SPLIT_RATIO = 0.9      # 训练集占比
 PART_RATIO = 1.0       # 使用样本比例（1.0=全部）

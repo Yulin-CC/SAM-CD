@@ -17,7 +17,7 @@ from tqdm import tqdm
 # ==============================#
 # 接口配置
 # ==============================#
-DATA_DIR = "/home/yulin/0-data/TestSet/1-ChangeDetect/testset-2605"
+DATA_DIR = "path/to/test/dir"
 IMAGE_DIR = "B"                 # 原图目录：改 "A" 或 "B" 即可切换叠加底图
 # ==============================#
 ALPHA = 0.45                    # 叠加透明度（0~1，越大越显眼）

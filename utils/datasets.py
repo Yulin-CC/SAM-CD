@@ -13,7 +13,7 @@ from utils.augmentations import rand_crop_CD, pos_aware_rand_crop_CD, rand_flip_
 num_classes = 1
 MEAN = np.array([123.675, 116.28, 103.53])
 STD  = np.array([58.395, 57.12, 57.375])
-root = '/home/yulin/0-data/0-public/changedetect/LEVIR-CD+/LEVIR-CD+'
+root = 'path/to/dataset/root'
 list_files = {}  # e.g. {'train': '/path/train.txt', 'val': '/path/val.txt'}
 
 def showIMG(img):

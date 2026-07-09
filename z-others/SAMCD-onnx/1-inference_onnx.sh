@@ -21,9 +21,6 @@ config_path="$SCRIPT_DIR/config/default.yaml"
 #---------------------------------------------------------------------------#
 
 
-source /home/ubuntu/miniconda3/etc/profile.d/conda.sh 2>/dev/null || true
-conda activate changeD 2>/dev/null || true
-
 cd "$SCRIPT_DIR"
 if [ -z "$out_dir" ]; then
   out_dir="$test_dir/repro/onnx"

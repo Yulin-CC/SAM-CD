@@ -18,13 +18,6 @@ pred_dir="path/to/pred/dir"            # 预测结果目录
 
 
 #---------------#
-# 切换到虚拟环境
-#---------------#
-source /home/ubuntu/miniconda3/etc/profile.d/conda.sh  # 虚拟环境切换实例化 (本地服务器的 annaconda 所在的位置)
-conda activate changeD                                  # 切换到 changeD 虚拟环境 (实际的虚拟环境的路径)
-
-
-#---------------#
 # 运行评估程序
 #---------------#
 cd "$PROJECT_ROOT"
