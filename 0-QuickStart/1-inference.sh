@@ -13,13 +13,13 @@ PROJECT_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
 #--------------------------------------#
 dev_id=0                                                                    # GPU 设备 ID
 #---------------------------------------------------------------------------#
-project="1-ChangeDetect_SAMCD-2606-v1.2"                                    # 项目名称
+project="SAMCD-2606-v1.2"                                                   # 项目名称
 #---------------------------------------------------------------------------#
-test_dir="/home/yulin/0-data/TestSet/1-ChangeDetect/0-Feedback/260623"      # 测试集路径（含 A/ B/ 子目录）
+test_dir="path/to/test/dir"                                                 # 测试集路径（含 A/ B/ 子目录）
 #---------------------------------------------------------------------------#
-chkpt_path="runs/0-train/$project/checkpoint/best.pth"            # 模型权重（与 train 保存的 best 一致）
+chkpt_path="runs/0-train/$project/checkpoint/best.pth"                      # 模型权重（与 train 保存的 best 一致）
 #---------------------------------------------------------------------------#
-config_path="config/default.yaml"                                            # 统一配置文件路径（相对项目根目录）
+config_path="config/default.yaml"                                           # 统一配置文件路径（相对项目根目录）
 #---------------------------------------------------------------------------#
 
 

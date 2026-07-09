@@ -12,8 +12,8 @@ PROJECT_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
 # 需要修改的值
 #--------------------------------------#
 config_path="config/default.yaml"      # 统一配置文件路径（相对项目根目录）
-GT_dir="/home/yulin/0-data/TestSet/1-ChangeDetect/testset-crop/label"                     # Ground Truth 标签目录
-pred_dir="/home/yulin/0-data/TestSet/1-ChangeDetect/testset-crop/repro/1-ChangeDetect_SAMCD-2606-v1.1-resize/bcd_map"   # 预测结果目录
+GT_dir="path/to/GT/dir"                # Ground Truth 标签目录
+pred_dir="path/to/pred/dir"            # 预测结果目录
 #--------------------------------------#
 
 
